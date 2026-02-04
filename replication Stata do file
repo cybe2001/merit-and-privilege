@@ -1,8 +1,11 @@
-** author: JM
-** last edited: January 3, 2026
+*** Replication code
+* article: Visualizing belief in merit and privilege, 1930-2020 - Rejoinder
+* publication: Socius
+* author: Jonathan J.B. Mijs
+* doi: 
+* last edited: February 3, 2026
 
 *** Adding in countries 
-cd "..."
 use "ZA5389_v1-0-0.dta",clear
 gen c_sample_year=1242009
 gen country=124
@@ -16,7 +19,7 @@ rename V12 v8
 rename V15 v10 
 rename V16 v12
 keep country c_sample_year year AGE v1 v2 v3 v6 v7 v8 v10 v12
-save "temp canada 2009.dta", replace
+save "temp canada.dta", replace
 
 use "ZA5995_v1-0-0.dta",clear
 gen c_sample_year=5282009
@@ -31,7 +34,7 @@ rename V12 v8
 rename V15 v10 
 rename V16 v12
 keep country c_sample_year year AGE v1 v2 v3 v6 v7 v8 v10 v12
-save "temp netherlands 2009.dta", replace
+save "temp netherlands.dta", replace
 
 use "ZA2496_v1-0-0.dta", clear
 gen country=724
@@ -56,7 +59,7 @@ rename reli v10
 rename sex v12 
 rename v100 AGE
 keep country c_sample_year year AGE v1 v2 v3 v6 v7 v8 v10 v12
-save  "temp spain 1992.dta", replace	
+save  "temp spain.dta", replace	
 	
 use "ZA7810_v1-0-0.dta", clear
 gen year=2019
@@ -70,7 +73,7 @@ rename v6 v8
 rename v4 v6 
 rename age AGE
 keep country c_sample_year year AGE v1 v2 v3 v6 v7 v8 v10 v12
-save  "temp ukraine 2019.dta", replace	
+save  "temp ukraine.dta", replace	
 	
 use "ZA7811_v1-0-0.dta", clear
 gen year=2019
@@ -87,8 +90,9 @@ rename conx v8
 rename reli v10 
 rename sex v12
 keep country c_sample_year year AGE v1 v2 v3 v6 v7 v8 v10 v12
-save  "temp hungary 2019.dta", replace	
+save  "temp hungary.dta", replace	
 	
+cd "G:\My Drive\_\Data\ISSP\ISSP 2019"
 use "ZA7812_v1-0-0.dta", clear
 gen c_sample_year=7032019
 gen year=2019
@@ -104,7 +108,7 @@ rename conx v8
 rename reli v10 
 rename sex v12
 keep country c_sample_year year AGE v1 v2 v3 v6 v7 v8 v10 v12
-save  "temp slovakia 2019.dta", replace	
+save  "temp slovakia.dta", replace	
 		
 *** Clean-up
 use "ZA8790_v1-0-0b.dta", clear
@@ -117,26 +121,6 @@ append using  "temp slovakia.dta"
 
 drop if year==1999 // missing depvars
 recode c_sample_year (276021992=276011992)(276022009=276012009)(276022019=276012019) (376022019=376012019) // merging East and West Germany; Jewish and Arab Israeli
-
-label define countrylong 36 "Australia" 40 "Austria" 100 "Bulgaria" ///
-						124 "Canada" 191 "Croatia" 196 "Cyprus" ///
-						203 "Czech Republic" 208 "Denmark" ///
-						246 "Finland" 250 "France" 276 "Germany" ///
-						348 "Hungary" 352 "Iceland" ///
-						372 "Ireland" 376 "Israel" 380 "Italy" ///
-						392 "Japan" 428 "Latvia" 440 ///
-						"Lithuania" 528 "Netherlands"  ///
-						554 "New Zealand" 578 "Norway" ///
-						616 "Poland" 620 "Portugal" 643 "Russia" 703 ///
-						"Slovakia" 705 "Slovenia" ///
-						724 "Spain" 752 "Sweden" ///
-						756 "Switzerland" 804 "Ukraine" ///
-						826 "United Kingdom" 840 "United States", replace 
-label values country countrylong
-tab country year
-
-recode year (1987=1988)(1992=1993)(2009=2010)(2019=2020) // setting year to median year of data collection 
-
 // dropping non-Western countries 
 drop if country==152  
 drop if country==158
@@ -146,27 +130,44 @@ drop if country==643
 drop if country==710
 drop if country==862
 
-*** Define depvars
+label define countrylong 36 "Australia" 40 "Austria" 100 "Bulgaria" ///
+						124 "Canada" 191 "Croatia" 203 "Czech Republic" ///
+						208 "Denmark" 246 "Finland" 250 "France" /// 
+						276 "Germany" 348 "Hungary" 352 "Iceland" ///
+						376 "Israel" 380 "Italy" 392 "Japan" 428 "Latvia" ///
+						440 "Lithuania" 528 "Netherlands" 554 "New Zealand" ///
+						578 "Norway" 616 "Poland" 620 "Portugal" ///
+						703 "Slovakia" 705 "Slovenia" 724 "Spain" ///
+						752 "Sweden" 756 "Switzerland" 804 "Ukraine" ///
+						826 "United Kingdom" 840 "United States", replace 
+label values country countrylong
+tab country year
+
+recode year (1987=1988)(1992=1993)(2009=2010)(2019=2020) // setting year to median year of data collection for graph purposes
+
+*** Define country-period depvars
 gen merit = . // hard work
 recode merit (*=100) if v6==1
-recode merit (*=100) if v6==2
-recode merit (*=0) if v6==3
-recode merit (*=0) if v6==4
-recode merit (*=0) if v6==5
+recode merit  (*=100) if v6==2
+recode merit  (*=0) if v6==3
+recode merit  (*=0) if v6==4
+recode merit  (*=0) if v6==5
 tab merit year, col
 
 gen privilege = . // parental wealth
 recode privilege (*=100) if v1==1
-recode privilege (*=100) if v1==2
-recode privilege (*=0) if v1==3
-recode privilege (*=0) if v1==4
-recode privilege (*=0) if v1==5
-tab privilege year, col
+recode privilege  (*=100) if v1==2
+recode privilege  (*=0) if v1==3
+recode privilege  (*=0) if v1==4
+recode privilege  (*=0) if v1==5
+tab privilege  year, col
 
-egen meritmean = mean(merit), by(c_sample_year)
-egen privmean = mean(priv), by(c_sample_year)
+egen meritmean = mean(merit), by(c_sample_year) // mean belief in merit by country-period 
+egen privmean = mean(privilege), by(c_sample_year) // mean belief in privilege by country-period 
 
-*** creating cohorts											
+*** Define country-cohort depvars
+
+// Creating cohorts											
 fre AGE
 drop if AGE==-9
 drop if AGE==.
@@ -200,11 +201,10 @@ recode cohortgroups (1920=1930)(1925=1930) // bottomcoding cohortgroup 1930 to i
 bysort country cohortgroup: gen n =_N
 drop if n<=49
 
-***
+egen meritc = mean(merit), by(cohortgroup country) // mean belief in merit by country-cohort
+egen privc = mean(privilege), by(cohortgroup country) // mean belief in privilege by country-cohort
 
-egen meritc = mean(merit), by(cohortgroup country) 
-egen privc = mean(priv), by(cohortgroup country)
-
+// coding countries by empirical pattern observed, for graphing purposes
 gen pattern=.
 recode pattern (.=1) if country==100  // row 1: widening
 recode pattern (.=1) if country==250
@@ -241,7 +241,9 @@ recode pattern (.=5) if country==440
 recode pattern (.=5) if country==840
 recode pattern (.=5) if country==352
 
-twoway ///
+*** Figure 1: Trends in beliefs across countries, by period and cohort
+forvalues i = 1/5 {
+    twoway ///
 	(scatter meritc cohortgroup, mcolor(bluishgray%50) ///
 		msymbol(diamond_hollow) mfcolor(%0)) ///
 	(lowess meritc cohortgroup, lcolor(ltblue) lwidth(.5) ///
@@ -255,116 +257,28 @@ twoway ///
 	(connected privmean year, sort mcolor(dkorange) msize(large) ///
 		msymbol(circle_hollow) mfcolor(%0) lcolor(gold) lwidth(.5) ///
 		lpattern(solid)) ///
-	if pattern==1, ///
+	if pattern==`i', ///
 	ytitle("") ylabel(0(25)100, nolabels grid glcolor(%50) ///
 	glpattern(solid)) xtitle("") ///
 	xlabel(1930(45)2020, nogrid) ///
-	by(, legend(off) note("")) name(row1, replace) ///
-	xsize(8) ysize(4) scale(1) ///
+	by(, legend(off) note("")) name(row`i', replace) ///
+	xsize(9) ysize(7) scale(1) ///
 	by(country, rows(1)) subtitle(, nobox) ///
-	graphregion(margin(zero)) plotregion(margin(zero))
-	
-twoway ///
-	(scatter meritc cohortgroup, mcolor(bluishgray%50) ///
-		msymbol(diamond_hollow) mfcolor(%0)) ///
-	(lowess meritc cohortgroup, lcolor(ltblue) lwidth(.5) ///
-		lpattern(solid)) ///
-	(connected meritmean year, sort mcolor(dknavy) msize(large) ///
-		msymbol(circle_hollow) mfcolor(%0) lcolor(dknavy) lwidth(medium)) ///
-	(scatter privc cohortgroup, mcolor(sandb%50) ///
-		msymbol(diamond_hollow) mfcolor(%0)) ///
-	(lowess privc cohortgroup, lcolor(sand) lwidth(.5) ///
-		lpattern(solid)) ///
-	(connected privmean year, sort mcolor(dkorange) msize(large) ///
-		msymbol(circle_hollow) mfcolor(%0) lcolor(gold) lwidth(.5) ///
-		lpattern(solid)) ///
-	if pattern==2, ///
-	ytitle("") ylabel(0(25)100, nolabels grid glcolor(%50) ///
-	glpattern(solid)) xtitle("") ///
-	xlabel(1930(45)2020, nogrid) ///
-	by(, legend(off) note("")) name(row2, replace) ///
-	xsize(8) ysize(4) scale(1) ///
-	by(country, rows(1)) subtitle(, nobox) ///
-	graphregion(margin(zero)) plotregion(margin(zero))
-	
-twoway ///
-	(scatter meritc cohortgroup, mcolor(bluishgray%50) ///
-		msymbol(diamond_hollow) mfcolor(%0)) ///
-	(lowess meritc cohortgroup, lcolor(ltblue) lwidth(.5) ///
-		lpattern(solid)) ///
-	(connected meritmean year, sort mcolor(dknavy) msize(large) ///
-		msymbol(circle_hollow) mfcolor(%0) lcolor(dknavy) lwidth(medium)) ///
-	(scatter privc cohortgroup, mcolor(sandb%50) ///
-		msymbol(diamond_hollow) mfcolor(%0)) ///
-	(lowess privc cohortgroup, lcolor(sand) lwidth(.5) ///
-		lpattern(solid)) ///
-	(connected privmean year, sort mcolor(dkorange) msize(large) ///
-		msymbol(circle_hollow) mfcolor(%0) lcolor(gold) lwidth(.5) ///
-		lpattern(solid)) ///
-	if pattern==3, ///
-	ytitle("") ylabel(0(25)100, nolabels grid glcolor(%50) ///
-	glpattern(solid)) xtitle("") ///
-	xlabel(1930(45)2020, nogrid) ///
-	by(, legend(off) note("")) name(row3, replace) ///
-	xsize(8) ysize(4) scale(1) ///
-	by(country, rows(1)) subtitle(, nobox) ///
-	graphregion(margin(zero)) plotregion(margin(zero))
-	
-twoway ///
-	(scatter meritc cohortgroup, mcolor(bluishgray%50) ///
-		msymbol(diamond_hollow) mfcolor(%0)) ///
-	(lowess meritc cohortgroup, lcolor(ltblue) lwidth(.5) ///
-		lpattern(solid)) ///
-	(connected meritmean year, sort mcolor(dknavy) msize(large) ///
-		msymbol(circle_hollow) mfcolor(%0) lcolor(dknavy) lwidth(medium)) ///
-	(scatter privc cohortgroup, mcolor(sandb%50) ///
-		msymbol(diamond_hollow) mfcolor(%0)) ///
-	(lowess privc cohortgroup, lcolor(sand) lwidth(.5) ///
-		lpattern(solid)) ///
-	(connected privmean year, sort mcolor(dkorange) msize(large) ///
-		msymbol(circle_hollow) mfcolor(%0) lcolor(gold) lwidth(.5) ///
-		lpattern(solid)) ///
-	if pattern==4, ///
-	ytitle("") ylabel(0(25)100, nolabels grid glcolor(%50) ///
-	glpattern(solid)) xtitle("") ///
-	xlabel(1930(45)2020, nogrid) ///
-	by(, legend(off) note("")) name(row4, replace) ///
-	xsize(8) ysize(4) scale(1) ///
-	by(country, rows(1)) subtitle(, nobox) ///
-	graphregion(margin(zero)) plotregion(margin(zero))
+	graphregion(margin(zero)) plotregion(margin(zero))        
+}
 
-twoway ///
-	(scatter meritc cohortgroup, mcolor(bluishgray%50) ///
-		msymbol(diamond_hollow) mfcolor(%0)) ///
-	(lowess meritc cohortgroup, lcolor(ltblue) lwidth(.5) ///
-		lpattern(solid)) ///
-	(connected meritmean year, sort mcolor(dknavy) msize(large) ///
-		msymbol(circle_hollow) mfcolor(%0) lcolor(dknavy) lwidth(medium)) ///
-	(scatter privc cohortgroup, mcolor(sandb%50) ///
-		msymbol(diamond_hollow) mfcolor(%0)) ///
-	(lowess privc cohortgroup, lcolor(sand) lwidth(.5) ///
-		lpattern(solid)) ///
-	(connected privmean year, sort mcolor(dkorange) msize(large) ///
-		msymbol(circle_hollow) mfcolor(%0) lcolor(gold) lwidth(.5) ///
-		lpattern(solid)) ///
-	if pattern==5, ///
-	ytitle("") ylabel(0(25)100, nolabels grid glcolor(%50) ///
-	glpattern(solid)) xtitle("") ///
-	xlabel(1930(45)2020, nogrid) ///
-	by(, legend(off) note("")) name(row5, replace) ///
-	xsize(8) ysize(4) scale(1) ///
-	by(country, rows(1)) subtitle(, nobox) ///
-	graphregion(margin(zero)) plotregion(margin(zero))
-	
 gr combine row1 row2 row3 row4 row5, ///
-	cols(1) imargin(zero) ysize(50) xsize(85) xcommon ///
-	title("Belief in merit and privilege", size(huge))
+	cols(1)  imargin(zero) ysize(45) xsize(60) xcommon ///
+	title("Belief in merit and privilege", size(huge)) ///
+	subtitle("belief in hard work (merit) in blue; belief in family wealth (privilege) in orange", ///
+	size(vsmall) color(gs8))
 graph save "Fig 1.gph", replace
 graph export "Fig 1.png", replace
 graph export "Fig 1.pdf", replace
 
-// annualized trends
-** belief change across periods
+*** Figure 2: Yearly trends in beliefs across countries, by period and cohort
+
+** Belief change across periods
 sort country year
 by country: gen changemerityear = ///
     (meritmean[_N] - meritmean[1]) / (year[_N] - year[1])
@@ -372,32 +286,37 @@ by country: gen changeprivyear = ///
     (privmean[_N] - privmean[1]) / (year[_N] - year[1])
 by country: gen n_obs = _N
 replace changemerityear = . if n_obs < 2
-	
-graph dot (mean) changemerityear (mean) changeprivyear, ///
-	over(country, sort(changemerityear) descending) nofill ///
-	marker(1, mcolor(dknavy) msymbol(circle) mfcolor(dknavy)) ///
-	marker(2, mcolor(dkorange) msymbol(diamond) mfcolor(dkorange)) ///
-	dots(mcolor(%25)) yline(0) ylabel(-1.5(.5)2.2) ymtick(-1.5(.1)2.2) ///
-	title("Annualized change across periods (1988-2020)", size(medlarge) color(gs6)) ///
-	legend(off) scheme(plotplainblind) name(changeyears, replace)
 
-** belief change across cohorts	
+** Belief change across cohorts	
 sort country cohortgroup
 by country: gen changemeritcohort = ///
     (meritc[_N] - meritc[1]) / (cohortgroup[_N] - cohortgroup[1])
 by country: gen changeprivcohort = ///
     (privc[_N] - privc[1]) / (cohortgroup[_N] - cohortgroup[1])
 	
+graph dot (mean) changemerityear (mean) changeprivyear, ///
+	over(country, sort(changemerityear) descending) nofill ///
+	marker(1, mcolor(dknavy) msymbol(circle) mfcolor(dknavy)) ///
+	marker(2, mcolor(dkorange) msymbol(diamond) mfcolor(dkorange)) ///
+	dots(mcolor(%25)) yline(0) ylabel(-1.5(.5)2.2) ymtick(-1.5(.1)2.2) ///
+	title("") ///
+	legend(title("Change across periods, 1988-2020", size(large) color(gs6)) ///
+	order(1 "Belief in hard work (merit)" 2 "Belief in family wealth (privilege)") rows(1) position(12) ring(1) color(gs4)) ///
+	scheme(plotplainblind) name(changeyears, replace)
+	
 graph dot (mean) changemeritcohort (mean) changeprivcohort, ///
 	over(country, sort(changemeritcohort) descending) nofill ///
 	marker(1, mcolor(ltblue) msymbol(circle) mfcolor(ltblue)) ///
 	marker(2, mcolor(sand) msymbol(diamond) mfcolor(sand)) ///
 	dots(mcolor(%25)) yline(0) ylabel(-.5(.1).5) ymtick(-.5(.1).6) ///
-	title("Annualized change across cohorts (1930-2020)", size(medlarge) color(gs6)) ///
-	legend(off) scheme(plotplainblind) name(changecohorts, replace)
+	title("") ///
+	legend(title("Change across cohorts, 1930-2020", size(large) color(gs6)) ///	
+	order(1 "Belief in hard work (merit)" 2 "Belief in family wealth (privilege)") rows(1) position(12) ring(1) color(gs4)) ///
+	scheme(plotplainblind) name(changecohorts, replace)
 
 gr combine changeyears changecohorts, ///
-title("Yearly change in belief in merit and privilege", size(huge) ) note("")
+	title("Yearly change in belief in merit and privilege", span size(huge)) ///
+	note("")
 graph save "Fig 2.gph", replace
 graph export "Fig 2.png", replace
 graph export "Fig 2.pdf", replace
