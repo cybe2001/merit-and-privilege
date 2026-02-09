@@ -2,8 +2,8 @@
 * article: Visualizing belief in merit and privilege, 1930-2020 - Rejoinder
 * publication: Socius
 * author: Jonathan J.B. Mijs
-* doi: 
-* last edited: February 3, 2026
+* doi: 10.1177/23780231261426413
+* last edited: February 9, 2026
 
 *** Adding in countries 
 use "ZA5389_v1-0-0.dta",clear
@@ -270,8 +270,8 @@ forvalues i = 1/5 {
 gr combine row1 row2 row3 row4 row5, ///
 	cols(1)  imargin(zero) ysize(45) xsize(60) xcommon ///
 	title("Belief in merit and privilege", size(huge)) ///
-	subtitle("belief in hard work (merit) in blue; belief in family wealth (privilege) in orange", ///
-	size(vsmall) color(gs8))
+	subtitle("belief in hard work (merit) displayed in blue; belief in family wealth (privilege) in orange", ///
+	size(vsmall) color(gs6))
 graph save "Fig 1.gph", replace
 graph export "Fig 1.png", replace
 graph export "Fig 1.pdf", replace
@@ -300,7 +300,7 @@ graph dot (mean) changemerityear (mean) changeprivyear, ///
 	marker(2, mcolor(dkorange) msymbol(diamond) mfcolor(dkorange)) ///
 	dots(mcolor(%25)) yline(0) ylabel(-1.5(.5)2.2) ymtick(-1.5(.1)2.2) ///
 	title("") ///
-	legend(title("Change across periods, 1988-2020", size(large) color(gs6)) ///
+	legend(title("Change across periods, 1988-2020", size(large) color(gs4) ///
 	order(1 "Belief in hard work (merit)" 2 "Belief in family wealth (privilege)") rows(1) position(12) ring(1) color(gs4)) ///
 	scheme(plotplainblind) name(changeyears, replace)
 	
@@ -310,7 +310,7 @@ graph dot (mean) changemeritcohort (mean) changeprivcohort, ///
 	marker(2, mcolor(sand) msymbol(diamond) mfcolor(sand)) ///
 	dots(mcolor(%25)) yline(0) ylabel(-.5(.1).5) ymtick(-.5(.1).6) ///
 	title("") ///
-	legend(title("Change across cohorts, 1930-2020", size(large) color(gs6)) ///	
+	legend(title("Change across cohorts, 1930-2020", size(large) color(gs4)) ///	
 	order(1 "Belief in hard work (merit)" 2 "Belief in family wealth (privilege)") rows(1) position(12) ring(1) color(gs4)) ///
 	scheme(plotplainblind) name(changecohorts, replace)
 
