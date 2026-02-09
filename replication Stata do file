@@ -270,7 +270,7 @@ forvalues i = 1/5 {
 gr combine row1 row2 row3 row4 row5, ///
 	cols(1)  imargin(zero) ysize(45) xsize(60) xcommon ///
 	title("Belief in merit and privilege", size(huge)) ///
-	subtitle("belief in hard work (merit) displayed in blue; belief in family wealth (privilege) in orange", ///
+	subtitle("(Belief in hard work (merit) displayed in blue; belief in family wealth (privilege) in orange)", ///
 	size(vsmall) color(gs6))
 graph save "Fig 1.gph", replace
 graph export "Fig 1.png", replace
